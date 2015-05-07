@@ -18,43 +18,58 @@ git commit -m "Finished prequiz"
 git push -u --all origin
 ----
 
+James Astbury
+
 == Questions
 
 What is the difference between a set, a bag, and a sequence?
 
+	I do not know what these are in terms of a compiler.
 
 What is a language (in terms of sets and sequences)?
 
+	I'm not sure what it means in this context.
 
 What is a compiler? Name some.
 
+	A compiler is something takes code like java and puts it into machine code that a computer can understand.
 
 What is an interpreter? How does that differ from a compiler?
 
+	I don't know the difference.
 
 What is the derivative of a language?
 
+	I don't know.
 
 What is a regular expression?
 
+	I know what Regex which can check parts of a string but I don't think that's what you're asking.
 
 What is a finite automaton, and what is the difference between an NFA and a DFA?
 
+	I have no idea.
 
 What is a grammar, and what is the difference between regular grammars, context-free grammars, LL(k) and LR(k)?
 
+	I don't know.
 
 What is the difference between derivative parsing, recursive-descent parsing, shift-reduce parsing and parser combinators?
 
+	I haven't learned about any of these.
 
 What is a visitor?
 
+	Not sure in the context of compilers.
 
 What is the difference between a parse tree and an abstract syntax tree?
 
+	No idea.
 
 Name some optimizations.
 
+	Don't know any for compilers.
 
 What questions do you have for me?
 
+	Are you going to teach us all this?
