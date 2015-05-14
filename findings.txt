@@ -1,0 +1,19 @@
+James Astbury
+Lab 1
+5/14/15
+
+1. 	Tiny C Compiler
+
+2. 	Scan/Tokenize/Lexical Analysis: For this I found tcctok.h. I think this is a file that contains a series of tokens
+									that seem to be in key value pairs. I'm not quite sure what calls these and implements them though.
+	Parse: 	parse_args in tcc.c is a function I found in a file, may have something to do with parsing
+			Also found a @parser section in the tcc-doc.texi file. 
+	Translate/AST: 	texi2pod.pl has a section of regex that I think might be doing some translating.
+					Also found win32/include/winapi/windows.h that translates GCC target to MS equivalents.
+	Optimization code: I found this "il-opcodes.h" which I think is where optimization code is held.
+	Generate Code: 	I found these files x86_64-gen.c, arm-gen.c, c67-gen.c, and i386-gen.c. I believe these generate code
+					and are selected based on what system architecture is in place.
+
+3. 	The most ridiculous thing I found was the amount of code that seemed repetitive. I don't know much about compilers but it's
+	just something I noticed. I also noticed a lot of hard coded stuff. In one of the comments of the code it says something 
+	along the lines of "this parser is hardcoded."
