@@ -103,26 +103,22 @@ class Program : public Container {
  * Read in the file by recursive descent.
  * Modify as necessary and add whatever functions you need to get things done. 20 lines
  */
-void parse(fstream & file, Container * container) { // container is program node
-	// while loop read in characters one at a time
+void parse(fstream & file, Container * container) {
     char c;
-    // How to peek at the next character
+    
 	while ((char)file.peek() != -1) {
-		// How to read a character from the file and advance to the next character
-		file >> c;
-		// How to print out that character
-		cout << c;
-		// How to insert a node into the container.
-		if (c == '[') {
-			// Need to add children to loop until ']' then push loop onto container
-			Loop * l;
-			parse(file, l);
-			container->children.push_back(l);
+		file >> c; // read in next character
+		
+		if (c == '[') { 
+			// If beginning of loop declare new loop and call parse recursively til loop is over
+			Loop * loop = new Loop;
+			container->children.push_back(loop);
+			parse(file, loop);
 		}
-		else if (c == ']') {
+		else if (c == ']') { // Loop has ended, end recursive call
 			return;
 		}
-		else { 
+		else { // Command found, add it to the parent container
 			container->children.push_back(new CommandNode(c));
 		}
 	}
