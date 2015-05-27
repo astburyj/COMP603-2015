@@ -111,13 +111,21 @@ void parse(fstream & file, Container * container) { // container is program node
 		// How to read a character from the file and advance to the next character
 		file >> c;
 		// How to print out that character
-		//cout << c;
+		cout << c;
 		// How to insert a node into the container.
-		container->children.push_back(new CommandNode(c));
+		if (c == '[') {
+			// Need to add children to loop until ']' then push loop onto container
+			Loop * l;
+			parse(file, l);
+			container->children.push_back(l);
+		}
+		else if (c == ']') {
+			return;
+		}
+		else { 
+			container->children.push_back(new CommandNode(c));
+		}
 	}
-	/* if loop recursive call - its a new level
-		[ call parse recursively
-		] return from parse*/
 }
 
 /**

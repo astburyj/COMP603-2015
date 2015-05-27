@@ -1,5 +1,14 @@
 = Compiler Design
 
+== May 22: Moar hints & stuff
+
+See updated lab description and hints below.
+
+Also, your favorite language sucks, and here's why.
+
+* https://archive.org/details/wat_destroyallsoftware#[JavaScript and Ruby]
+* http://eev.ee/blog/2012/04/09/php-a-fractal-of-bad-design/[PHP]
+
 == May 21: Lab 2. Parsing Brainfuck
 
 === Preliminaries
@@ -7,11 +16,11 @@
 Go ahead and pull from me:
 
 ----
-cd COMP603-2015
+cd ~/COMP603-2015
 git pull upstream master
 ----
 
-Do you have Visual Studio or http://sourceforge.net/projects/mingw/files/latest/download?source=files[GCC] installed?
+Do you have Visual Studio or http://sourceforge.net/projects/codeblocks/files/Binaries/13.12/Windows/codeblocks-13.12mingw-setup.exe[Code Blocks] or XCode installed?
 The starter code, `src/brainfuck.cpp`, is in `C++`.
 
 === Goal
@@ -32,31 +41,67 @@ Command -> '+' | '-' | '<' | '>' | ',' | '.'
 Loop -> '[' Sequence ']'
 ----
 
+Brainfuck in EBNF is:
+
+----
+Program -> Sequence
+
+Sequence -> ( Command | Loop | Comment ) *
+
+Command -> '+' | '-' | '<' | '>' | ',' | '.'
+
+Loop -> '[' Sequence ']'
+
+Comment -> any character other than '+' | '-' | '<' | '>' | ',' | '.' | '[' | ']'
+----
+
 === Hints
+
+The parser will probably be no longer than 20-30 lines; the solution is shorter than the problem statement.
+To read characters in a loop, `while(file >> c) { ... }`
 
 If your `C++` is rusty, see the http://www.cplusplus.com/reference/[C++ Reference].
 
-Write the recursive descent parser using one of the strategies below.
+Write the recursive descent parser using any of these strategies:
 
-. *Use mutually recursive functions* as done in `RecursiveDescent.java`.
+. Write `parse` recursively.
+. Use mutually recursive functions as done in `in-class/RecursiveDescent.java`.
 For each nonterminal in the grammar, write a function with the name of the nonterminal.
 Peek at the next character and figure out which production (rule) to apply based on the first and/or follow sets.
 . Maintain an explicit stack of nodes inside the existing `parse` function.
-. Write `parse` as a recursive function.
 . Use an implicit stack by modifying `Node` to include a pointer to a `parent` Node.
 
 NOTE: Your parser *cannot* avoid using recursion or a stack (implicit or explicit). Don't even.
 
-Stuff child nodes into `Program` at the top-level, and inside `Loop`s elsewhere.
+You are done if your program builds a tree structure *correctly*.
+You need to place child nodes into the appropriate `Container`.
+This means `Program` at the top-level, and inside a new `Loop` in the appropriate spots.
 
-You've completed this lab if your program prints the *exact* same program as what your parser read in (including the loop brackets) without modifying `main`.
-In `main`, the program traverses the tree your parser built, using the `Printer` http://en.wikipedia.org/wiki/Visitor_pattern[visitor] to print Brainfuck code.
+To check your implementation, use the `is-lab2-done.sh` script, or compare program output with input.
+The program traverses the tree your parser built and prints it out with the `Printer` http://en.wikipedia.org/wiki/Visitor_pattern[visitor].
+If the program shows any discrepancy between the program output and input, it means your parser formed the tree improperly.
+Of course, printing out the input file without forming a tree fools the script, but nobody else.
 
-NOTE: Any discrepancy between the program output and input means your parser formed the tree improperly, and you're not done.
+----
+cd ~/COMP603-2015
+cd src
+g++ -o brainfuck.exe brainfuck.cpp
+brainfuck.exe helloworld.bf
+chmod +x is-lab2-done.sh
+./is-lab2-done.sh
+----
 
 === Deadline
 
 Please complete before the next lab period. In the next lab, we'll write an interpreter for Brainfuck.
+
+Modify `src/brainfuck.cpp` in place, or replace it with your version.
+
+----
+cd ~/COMP603-2015
+git commit -am "Lab 2 done."
+git push origin master
+----
 
 == May 20: Shift-reduce parsing LR(k) grammars
 
@@ -120,7 +165,7 @@ LL(k) grammars can be parsed using 'recursive descent'.
 
 Recursive descent parsing is also known as top-down parsing, because the parse starts from the starting nonterminal.
 Each nonterminal is a function, and the first and follow sets determine which production (rule) to choose.
-See `RecursiveDescent.java` for an example recursive descent parser.
+See `in-class/RecursiveDescent.java` for an example recursive descent parser.
 
 == May 15: Derivations and parsing
 
