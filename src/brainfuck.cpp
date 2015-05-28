@@ -118,7 +118,7 @@ void parse(fstream & file, Container * container) {
 		else if (c == ']') { // Loop has ended, end recursive call
 			return;
 		}
-		else { // Command found, add it to the parent container
+		else if (c == '+' || c == '-' || c == '<' || c == '>' || c == ',' || c == '.') { // Command found, add it to the parent container
 			container->children.push_back(new CommandNode(c));
 		}
 	}
