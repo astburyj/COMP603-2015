@@ -156,21 +156,60 @@ class Printer : public Visitor {
         }
 };
 
-class Interpreter : public Visitor {
+class Compiler : public Visitor {
     public:
         void visit(const CommandNode * leaf) {
             switch (leaf->command) {
+                case INCREMENT:   cout << "++*ptr;"; break;
+                case DECREMENT:   cout << "--*ptr;"; break;
+                case SHIFT_LEFT:  cout << "--ptr;\n"; break;
+                case SHIFT_RIGHT: cout << "++ptr;\n"; break;
+                case INPUT:       cout << "*ptr=getchar();\n"; break;
+                case OUTPUT:      cout << "putchar(*ptr);\n"; break;
+            }
+        }
+        void visit(const Loop * loop) {
+            cout << "while (*ptr) {";
+            for (vector<Node*>::const_iterator it = loop->children.begin(); it != loop->children.end(); ++it) {
+                (*it)->accept(this);
+            }
+            cout << "}";
+        }
+        void visit(const Program * program) {
+			cout << "#include <stdio.h>\n";
+			cout << "char array[30000] = {0};\n";
+			cout << "char *ptr=array;\n";
+			cout << "int main(int argc, char **argv) {\n";
+			
+            for (vector<Node*>::const_iterator it = program->children.begin(); it != program->children.end(); ++it) {
+                (*it)->accept(this);
+            }
+            cout << "}\n";
+        }
+};
+
+class Interpreter : public Visitor {
+	char memory[3000];
+	int curPos;
+	public:
+        void visit(const CommandNode * leaf) {
+            switch (leaf->command) {
                 case INCREMENT:
+					memory[curPos] = memory[curPos] + 1;
                     break;
                 case DECREMENT:
+					memory[curPos] = memory[curPos] - 1;
                     break;
                 case SHIFT_LEFT:
+					curPos--;
                     break;
                 case SHIFT_RIGHT:
+					curPos++;
                     break;
                 case INPUT:
                     break;
                 case OUTPUT:
+					cout << memory[curPos];
                     break;
             }
         }
@@ -178,8 +217,17 @@ class Interpreter : public Visitor {
             for (vector<Node*>::const_iterator it = loop->children.begin(); it != loop->children.end(); ++it) {
                 (*it)->accept(this);
             }
+			if (memory[curPos] != 0) {
+				visit(loop);
+			}
         }
         void visit(const Program * program) {
+			// zero init the memory array
+			// set the pointer to zero
+			curPos = 0;
+			for (int i = 0; i < 3000; i++) {
+				memory[i] = 0;
+			}
             for (vector<Node*>::const_iterator it = program->children.begin(); it != program->children.end(); ++it) {
                 (*it)->accept(this);
             }
@@ -191,6 +239,7 @@ int main(int argc, char *argv[]) {
     Program program;
     Printer printer;
     Interpreter interpreter;
+	Compiler compiler;
     if (argc == 1) {
         cout << argv[0] << ": No input files." << endl;
     } else if (argc > 1) {
@@ -199,6 +248,7 @@ int main(int argc, char *argv[]) {
             parse(file, & program);
 //            program.accept(&printer);
             program.accept(&interpreter);
+			//program.accept(&compiler);
             file.close();
         }
     }
